@@ -1,32 +1,9 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
 
 #Above code uses OpenCV EAST model for text detection and tesseract for text recognition.
 
-
-# In[9]:
-
-
 get_ipython().system('ls ../input/text-detection/')
-
-
-# In[1]:
-
-
 pip install imutils
-
-
-# In[3]:
-
-
 pip install pytesseract
-
-
-# In[1]:
-
 
 ##Loading the necessary packages 
 import numpy as np
@@ -35,40 +12,11 @@ from imutils.object_detection import non_max_suppression
 import pytesseract
 from matplotlib import pyplot as plt
 
-
-# In[11]:
-
-
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
-
-# In[5]:
-
-
-#args = {"image":"../input/text-detection/example-images/Example-images/ex24.jpg", "east":"../input/text-detection/east_text_detection.pb", "min_confidence":0.5, "width":320, "height":320}
-
-
-# In[2]:
-
-
 min_confidence=0.5
-
-
-# In[3]:
-
-
 width=320
-
-
-# In[4]:
-
-
 height=320
-
-
-# In[5]:
-
-
 #args['image']="../input/text-detection/example-images/Example-images/ex24.jpg"
 
 image = cv2.imread('ex24.jpg')
@@ -93,10 +41,6 @@ image = cv2.resize(image, (newW, newH))
 blob = cv2.dnn.blobFromImage(image, 1.0, (W, H),
 	(123.68, 116.78, 103.94), swapRB=True, crop=False)
 
-
-# In[6]:
-
-
 # load the pre-trained EAST model for text detection 
 net = cv2.dnn.readNet("east_text_detection.pb")
 
@@ -109,15 +53,9 @@ layerNames = [
 	"feature_fusion/concat_3"]
 
 
-# In[7]:
-
-
 #Forward pass the blob from the image to get the desired output layers
 net.setInput(blob)
 (scores, geometry) = net.forward(layerNames)
-
-
-# In[8]:
 
 
 
@@ -166,21 +104,13 @@ def predictions(prob_score, geo):
 
 
 
-# In[9]:
-
-
 # Find predictions and  apply non-maxima suppression
 (boxes, confidence_val) = predictions(scores, geometry)
 boxes = non_max_suppression(np.array(boxes), probs=confidence_val)
 
 
-# In[15]:
-
 
 install tesseract-ocr
-
-
-# In[12]:
 
 
 results = []
@@ -205,8 +135,6 @@ for (startX, startY, endX, endY) in boxes:
 	results.append(((startX,startY, endX, endY), text))
 
 
-# In[13]:
-
 
 #Display the image with bounding box and recognized text
 orig_image = orig.copy()
@@ -226,10 +154,6 @@ for ((start_X, start_Y, end_X, end_Y), text) in results:
 plt.imshow(orig_image)
 plt.title('Output')
 plt.show()
-
-
-# In[ ]:
-
 
 
 
